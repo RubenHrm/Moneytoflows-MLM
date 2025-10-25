@@ -1,9 +1,17 @@
+# Étape 1 : Image de base
 FROM python:3.11-slim
+
+# Étape 2 : Définir le dossier de travail
 WORKDIR /app
-RUN apt-get update && apt-get install -y build-essential libpq-dev gcc --no-install-recommends && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Étape 3 : Copier les fichiers
 COPY . .
-ENV FLASK_APP=app.py
-EXPOSE 8080
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
+
+# Étape 4 : Installer les dépendances
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Étape 5 : Exposer le port
+EXPOSE 3000
+
+# Étape 6 : Lancer le serveur
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000"]
